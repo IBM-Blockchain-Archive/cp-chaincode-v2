@@ -224,7 +224,7 @@ func (t *SimpleChaincode) issueCommercialPaper(stub *shim.ChaincodeStub, args []
 	
 	fmt.Println("Getting State on CP " + cp.CUSIP)
 	cpRxBytes, err := stub.GetState(cpPrefix+cp.CUSIP);
-	if err != nil {
+	if cpRxBytes == nil {
 		fmt.Println("CUSIP does not exist, creating it")
 		cpBytes, err := json.Marshal(&cp)
 		if err != nil {
