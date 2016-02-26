@@ -300,6 +300,13 @@ func (t *SimpleChaincode) issueCommercialPaper(stub *shim.ChaincodeStub, args []
 		}
 		
 		cprx.Qty = cprx.Qty + cp.Qty;
+		
+		for key, val := range cprx.Owners {
+			if val.Company == cp.Issuer {
+				cprx.Owners[key].Quantity += cp.Qty
+				break
+			}
+		}
 				
 		cpWriteBytes, err := json.Marshal(&cprx)
 		if err != nil {
