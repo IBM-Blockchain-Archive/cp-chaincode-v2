@@ -312,7 +312,7 @@ func (t *SimpleChaincode) issueCommercialPaper(stub *shim.ChaincodeStub, args []
 			return nil, errors.New("Error issuing commercial paper")
 		}
 
-		fmt.Println("Updated commercial paper %+v\n", cp)
+		fmt.Println("Updated commercial paper %+v\n", cprx)
 		return nil, nil
 	}
 }
