@@ -423,7 +423,7 @@ func GetCompany(companyID string, stub *shim.ChaincodeStub) (Account, error){
 
 	err = json.Unmarshal(companyBytes, &company)
 	if err != nil {
-		fmt.Println("Error unmarshalling account " + companyID)
+		fmt.Println("Error unmarshalling account " + companyID + "\n err:" + err.Error())
 		return company, errors.New("Error unmarshalling account " + companyID)
 	}
 	
