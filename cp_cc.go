@@ -158,7 +158,7 @@ func (t *SimpleChaincode) createAccounts(stub *shim.ChaincodeStub, args []string
 
 func (t *SimpleChaincode) createAccount(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
     // Obtain the username to associate with the account
-    if len(args) != 0 {
+    if len(args) != 1 {
         fmt.Println("Error obtaining username")
         return nil, errors.New("createAccount accepts a single username argument")
     }
