@@ -20,7 +20,6 @@ package main
 
 import (
 	"encoding/json"
-    "encoding/binary"
 	"errors"
 	"fmt"
 	"strconv"
