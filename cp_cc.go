@@ -426,7 +426,7 @@ func GetCompany(companyID string, stub *shim.ChaincodeStub) (Account, error){
 	if err != nil {
 		fmt.Println("Error unmarshalling account " + companyID + "\n err:" + err.Error())
         var account_length = binary.Size(companyBytes)
-        fmt.Println("Account array length:" + string(account_length))
+        fmt.Println("Account array length:" + strconv.Itoa(account_length))
         fmt.Println("JSON that caused the error:" + string(companyBytes[:account_length]))
 		return company, errors.New("Error unmarshalling account " + companyID)
 	}
