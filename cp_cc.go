@@ -20,6 +20,7 @@ package main
 
 import (
 	"encoding/json"
+    "encoding/binary"
 	"errors"
 	"fmt"
 	"strconv"
@@ -424,7 +425,9 @@ func GetCompany(companyID string, stub *shim.ChaincodeStub) (Account, error){
 	err = json.Unmarshal(companyBytes, &company)
 	if err != nil {
 		fmt.Println("Error unmarshalling account " + companyID + "\n err:" + err.Error())
-        fmt.Println("JSON that caused the error:" + string(companyBytes))
+        var account_length = binary.Size(companyBytes)
+        fmt.Println("Account array length:" + string(account_length))
+        fmt.Println("JSON that caused the error:" + string(companyBytes[:account_length]))
 		return company, errors.New("Error unmarshalling account " + companyID)
 	}
 	
