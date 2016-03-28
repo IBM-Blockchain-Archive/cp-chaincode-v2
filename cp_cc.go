@@ -175,10 +175,6 @@ func (t *SimpleChaincode) createAccount(stub *shim.ChaincodeStub, args []string)
         return nil, errors.New("Error creating account " + account.ID)
     }
     
-    var account_length = binary.Size(accountBytes)
-    fmt.Println("Account array length:" + strconv.Itoa(account_length))
-    fmt.Println("JSON for the account:" + string(accountBytes[:account_length]))
-    
     err = stub.PutState(accountPrefix+account.ID, accountBytes)
     fmt.Println("created account" + accountPrefix + account.ID)
     return nil, nil
@@ -430,9 +426,6 @@ func GetCompany(companyID string, stub *shim.ChaincodeStub) (Account, error){
 	err = json.Unmarshal(companyBytes, &company)
 	if err != nil {
 		fmt.Println("Error unmarshalling account " + companyID + "\n err:" + err.Error())
-        var account_length = binary.Size(companyBytes)
-        fmt.Println("Account array length:" + strconv.Itoa(account_length))
-        fmt.Println("JSON that caused the error:" + string(companyBytes[:account_length]))
 		return company, errors.New("Error unmarshalling account " + companyID)
 	}
 	
