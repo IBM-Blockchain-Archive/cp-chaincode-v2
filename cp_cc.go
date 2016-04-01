@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+    "strings"
 
 	"github.com/openblockchain/obc-peer/openchain/chaincode/shim"
 )
@@ -174,14 +175,29 @@ func (t *SimpleChaincode) createAccount(stub *shim.ChaincodeStub, args []string)
         return nil, errors.New("Error creating account " + account.ID)
     }
     
+    fmt.Println("Attempting to get state of any existing account for " + account.ID)
     existingBytes, err := stub.GetState(accountPrefix + account.ID)
 	if err == nil {
         
         var company Account
         err = json.Unmarshal(existingBytes, &company)
         if err != nil {
-            fmt.Println("Error unmarshalling account " + account.ID + "\n err:" + err.Error())
-            return nil, errors.New("Error unmarshalling existing account " + account.ID)
+            fmt.Println("Error unmarshalling account " + account.ID + "\n--->: " + err.Error())
+            
+            if strings.Contains(err.Error(), "unexpected end") {
+                fmt.Println("No existing account found for " + account.ID + ", initializing account.")
+                err = stub.PutState(accountPrefix+account.ID, accountBytes)
+                
+                if err == nil {
+                    fmt.Println("created account" + accountPrefix + account.ID)
+                    return nil, nil
+                } else {
+                    fmt.Println("failed to create initialize account for " + account.ID)
+                    return nil, errors.New("failed to initialize an account for " + account.ID + " => " + err.Error())
+                }
+            } else {
+                return nil, errors.New("Error unmarshalling existing account " + account.ID)
+            }
         } else {
             fmt.Println("Account already exists for " + account.ID + " " + company.ID)
 		    return nil, errors.New("Can't reinitialize existing user " + account.ID)
