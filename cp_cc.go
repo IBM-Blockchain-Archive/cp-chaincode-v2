@@ -174,10 +174,18 @@ func (t *SimpleChaincode) createAccount(stub *shim.ChaincodeStub, args []string)
         return nil, errors.New("Error creating account " + account.ID)
     }
     
-    _, err = stub.GetState(accountPrefix + account.ID)
+    existingBytes, err := stub.GetState(accountPrefix + account.ID)
 	if err == nil {
-        fmt.Println("Account already exists for " + account.ID)
-		return nil, errors.New("Can't reinitialize existing user " + account.ID)
+        
+        var company Account
+        err = json.Unmarshal(existingBytes, &company)
+        if err != nil {
+            fmt.Println("Error unmarshalling account " + account.ID + "\n err:" + err.Error())
+            return nil, errors.New("Error unmarshalling existing account " + account.ID)
+        } else {
+            fmt.Println("Account already exists for " + account.ID + " " + company.ID)
+		    return nil, errors.New("Can't reinitialize existing user " + account.ID)
+        }
     } else {
         
         fmt.Println("No existing account found for " + account.ID + ", initializing account.")
