@@ -174,9 +174,26 @@ func (t *SimpleChaincode) createAccount(stub *shim.ChaincodeStub, args []string)
         return nil, errors.New("Error creating account " + account.ID)
     }
     
-    err = stub.PutState(accountPrefix+account.ID, accountBytes)
-    fmt.Println("created account" + accountPrefix + account.ID)
-    return nil, nil
+    _, err = stub.GetState(accountPrefix + account.ID)
+	if err == nil {
+        fmt.Println("Account already exists for " + account.ID)
+		return nil, errors.New("Can't reinitialize existing user " + account.ID)
+    } else {
+        
+        fmt.Println("No existing account found for " + account.ID + ", initializing account.")
+        err = stub.PutState(accountPrefix+account.ID, accountBytes)
+        
+        if err == nil {
+            fmt.Println("created account" + accountPrefix + account.ID)
+            return nil, nil
+        } else {
+            fmt.Println("failed to create initialize account for " + account.ID)
+            return nil, errors.New("failed to initialize an account for " + account.ID + " => " + err.Error())
+        }
+        
+    }
+    
+    
 }
 
 func (t *SimpleChaincode) issueCommercialPaper(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
