@@ -185,7 +185,7 @@ func (t *SimpleChaincode) createAccount(stub *shim.ChaincodeStub, args []string)
             fmt.Println("Error unmarshalling account " + account.ID + "\n--->: " + err.Error())
             
             if strings.Contains(err.Error(), "unexpected end") {
-                fmt.Println("No existing account found for " + account.ID + ", initializing account.")
+                fmt.Println("No data means existing account found for " + account.ID + ", initializing account.")
                 err = stub.PutState(accountPrefix+account.ID, accountBytes)
                 
                 if err == nil {
